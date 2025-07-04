@@ -39,7 +39,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.get('/categories/products', getProductsByCategories)
 
   // products
-  app.post('/products/:categoriesId', createProducts)
+  app.post('/products', createProducts)
   app.get('/products', getProducts)
   app.put('/product/:productId', updateProduct)
 
