@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ROLE {
+  ADMIN
+  KITCHEN
+  WAITER
+}
+
+enum ProductActive {
+  TRUE
+  FALSE
+}
+
+enum TableActive {
+  TRUE
+  FALSE
+}
+
+enum TableStatus {
+  BUSY
+  FREE
+}
+
+enum OrdersStatus {
+  DELIVERED // entregue
+  PENDING // pendente
+  READY // pronto
+  CANCELLED // cancelado
+}
+
+enum OrdersWasPaid {
+  TRUE
+  FALSE
+}
+
+enum Payment {
+  PIX
+  CARD
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+
+  role ROLE @default(ADMIN)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Categories {
+  id   String @id @default(uuid())
+  name String
+
+  products Product[]
+
+  createdAt  DateTime @default(now())
+  upadetedAt DateTime @default(now())
+}
+
+model Product {
+  id          String        @id @default(uuid())
+  name        String
+  description String?
+  price       Float
+  imageUrl    String?
+  active      ProductActive @default(TRUE)
+
+  createdAt  DateTime @default(now())
+  upadetedAt DateTime @default(now())
+
+  categories   Categories? @relation(fields: [categoriesId], references: [id])
+  categoriesId String?
+
+  ordersItems OrdersItems[]
+}
+
+model Table {
+  id          String  @id @default(uuid())
+  numberTable String
+  capacity    String
+  qrcodePath  String?
+
+  tableActive TableActive @default(TRUE)
+  tableStatus TableStatus @default(FREE)
+
+  orders Orders[]
+
+  createdAt  DateTime @default(now())
+  upadetedAt DateTime @default(now())
+}
+
+model Orders {
+  id           String        @id @default(uuid())
+  status       OrdersStatus  @default(PENDING)
+  amount       Float
+  payment      Payment?
+  wasPaid      OrdersWasPaid @default(FALSE) // foi pago ?
+  observations String?
+
+  table   Table?  @relation(fields: [tableId], references: [id])
+  tableId String?
+
+  ordersItems OrdersItems[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model OrdersItems {
+  id               String @id @default(uuid())
+  priceUnitProduct Float
+  quantity         Int
+
+  orders   Orders? @relation(fields: [ordersId], references: [id])
+  ordersId String?
+
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String?
+}

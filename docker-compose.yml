@@ -1,0 +1,12 @@
+name: api-e-buteco
+
+services:
+  pg:
+    image: bitnami/postgresql:17.5.0
+
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=api-e-buteco

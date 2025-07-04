@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Table" ALTER COLUMN "numberTable" SET DATA TYPE TEXT,
+ALTER COLUMN "capacity" SET DATA TYPE TEXT;
