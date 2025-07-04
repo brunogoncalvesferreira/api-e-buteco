@@ -21,7 +21,7 @@ export async function createTable(
   try {
     const { numberTable, capacity } = schemaBodyReqeust.parse(request.body)
 
-    const qrcodeUrl = `http://localhost:5173/qrcode/${numberTable}`
+    const qrcodeUrl = `http://localhost:5173/mesa/?search=${numberTable}`
 
     const qrcodeFileName = `qrcode-${numberTable}.png`
 
