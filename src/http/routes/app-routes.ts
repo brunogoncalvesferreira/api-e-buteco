@@ -18,6 +18,8 @@ import { orderStatusReady } from './controllers/order-status-ready.ts'
 import { orderStatusDelivered } from './controllers/order-status-delivered.ts'
 import { orderStatusCancelled } from './controllers/order-status-cancelled.ts'
 import { getProductsByCategories } from './controllers/get-products-by-categories.ts'
+import { updateProduct } from './controllers/update-product.ts'
+import { updateProfile } from './controllers/update-profile.ts'
 
 export async function appRoutes(app: FastifyInstance) {
   // authenticate
@@ -26,6 +28,11 @@ export async function appRoutes(app: FastifyInstance) {
   // users
   app.post('/user', createUser)
   app.get('/profile', { onRequest: [ensureAuthenticate] }, getProfile)
+  app.put(
+    '/profile/:userId',
+    { onRequest: [ensureAuthenticate] },
+    updateProfile
+  )
 
   // categories
   app.post('/categories', createCategories)
@@ -34,6 +41,7 @@ export async function appRoutes(app: FastifyInstance) {
   // products
   app.post('/products/:categoriesId', createProducts)
   app.get('/products', getProducts)
+  app.put('/product/:productId', updateProduct)
 
   // tables
   app.post('/tables', createTable)
