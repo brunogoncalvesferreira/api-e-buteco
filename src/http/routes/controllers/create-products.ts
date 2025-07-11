@@ -33,6 +33,8 @@ export async function createProducts(
           filename
         )
 
+        const imageUrl = `products/${filename}`
+
         await pump(part.file, fs.createWriteStream(uploadPath))
 
         const product = await prisma.product.create({
@@ -41,7 +43,7 @@ export async function createProducts(
             description: String((file.description as MultipartValue).value),
             price: Number((file.price as MultipartValue).value),
             categoriesId: String((file.categoriesId as MultipartValue).value),
-            imageUrl: filename,
+            imageUrl,
           },
         })
 

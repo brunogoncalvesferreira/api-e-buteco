@@ -22,6 +22,7 @@ import { updateProduct } from './controllers/update-product.ts'
 import { updateProfile } from './controllers/update-profile.ts'
 import { logout } from './controllers/logout.ts'
 import { getCategories } from './controllers/get-categories.ts'
+import { getQrcodeUrl } from './controllers/get-qrcode-url.ts'
 
 export async function appRoutes(app: FastifyInstance) {
   // authenticate
@@ -50,6 +51,7 @@ export async function appRoutes(app: FastifyInstance) {
   // tables
   app.post('/tables', createTable)
   app.get('/tables', getTables)
+  app.get('/tables/qrcode/:tableId', getQrcodeUrl)
 
   // orders
   app.post('/order/:tableId', createOrders)

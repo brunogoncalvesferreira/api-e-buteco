@@ -20,7 +20,7 @@ export async function getTables(request: FastifyRequest, reply: FastifyReply) {
       },
 
       orderBy: {
-        createdAt: 'desc',
+        createdAt: 'asc',
       },
 
       take: 10,
