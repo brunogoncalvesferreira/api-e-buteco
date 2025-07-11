@@ -43,6 +43,7 @@ export async function authenticate(
       {
         sign: {
           sub: user.id,
+          expiresIn: '7d',
         },
       }
     )
@@ -50,6 +51,7 @@ export async function authenticate(
     reply.cookie('token', token, {
       httpOnly: true,
       sameSite: 'none',
+      secure: true,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7d
       path: '/',
     })

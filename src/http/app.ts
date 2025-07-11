@@ -14,15 +14,14 @@ import { join } from 'node:path'
 export const app = fastify()
 
 app.register(fastifyCors, {
-  origin: '*',
+  origin: ['http://localhost:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  credentials: true,
 })
 
 const uploadsPath = join(process.cwd(), 'uploads')
 
-app.register(fastifyMultipart, {
-  prefix: 'files',
-})
+app.register(fastifyMultipart)
 
 app.register(fastifyStatic, {
   root: uploadsPath,
@@ -37,7 +36,7 @@ app.register(fastifyCookie)
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
   cookie: {
-    cookieName: 'cookie',
+    cookieName: 'token',
     signed: false,
   },
 
