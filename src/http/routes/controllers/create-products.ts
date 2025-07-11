@@ -17,30 +17,27 @@ export async function createProducts(
   reply: FastifyReply
 ) {
   try {
-    const parts = request.files() // Multipart stream
-    const pump = util.promisify(pipeline) // Convert stream to promise
+    const parts = request.files()
+    const pump = util.promisify(pipeline)
 
-    // Iterate over the stream
-    for await (const chunk of parts) {
-      if (chunk.file) {
-        const multipart = chunk as Multipart // Convert chunk to Multipart
-        const file = multipart.fields as MultipartFields // Convert fields to MultipartFields
+    for await (const part of parts) {
+      if (part.file) {
+        const multipart = part as Multipart
+        const file = multipart.fields as MultipartFields
 
-        const filename = `${Date.now()}-${chunk.filename}` // Generate filename
+        const filename = `${Date.now()}-${part.filename}`
 
-        // Upload file
         const uploadPath = path.resolve(
           __dirname,
           '../../../../uploads/products',
           filename
         )
 
-        await pump(chunk.file, fs.createWriteStream(uploadPath)) // Convert stream to promise
+        await pump(part.file, fs.createWriteStream(uploadPath))
 
-        // Create product
         const product = await prisma.product.create({
           data: {
-            name: String((file.name as MultipartValue).value), // Convert value to string
+            name: String((file.name as MultipartValue).value),
             description: String((file.description as MultipartValue).value),
             price: Number((file.price as MultipartValue).value),
             categoriesId: String((file.categoriesId as MultipartValue).value),
@@ -48,9 +45,9 @@ export async function createProducts(
           },
         })
 
-        reply.status(201).send({ product }) // Send product
+        reply.status(201).send({ product })
       } else {
-        reply.status(400).send({ message: 'File not found' }) // Send error
+        reply.status(400).send({ message: 'File not found' })
       }
     }
   } catch (error) {

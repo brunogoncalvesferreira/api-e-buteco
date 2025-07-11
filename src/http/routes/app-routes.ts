@@ -20,10 +20,13 @@ import { orderStatusCancelled } from './controllers/order-status-cancelled.ts'
 import { getProductsByCategories } from './controllers/get-products-by-categories.ts'
 import { updateProduct } from './controllers/update-product.ts'
 import { updateProfile } from './controllers/update-profile.ts'
+import { logout } from './controllers/logout.ts'
+import { getCategories } from './controllers/get-categories.ts'
 
 export async function appRoutes(app: FastifyInstance) {
   // authenticate
   app.post('/authenticate', authenticate)
+  app.post('/logout', logout)
 
   // users
   app.post('/user', createUser)
@@ -36,6 +39,7 @@ export async function appRoutes(app: FastifyInstance) {
 
   // categories
   app.post('/categories', createCategories)
+  app.get('/categories', getCategories)
   app.get('/categories/products', getProductsByCategories)
 
   // products

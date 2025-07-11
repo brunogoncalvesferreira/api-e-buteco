@@ -19,7 +19,6 @@ export async function getProfile(request: FastifyRequest, reply: FastifyReply) {
         name: true,
         email: true,
         role: true,
-        password: true,
         createdAt: true,
         updatedAt: true,
       },
