@@ -1,29 +1,25 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { z } from 'zod'
+import z from 'zod'
 import { prisma } from '../../../lib/prisma.ts'
 
 const schemaRequestQuery = z.object({
   pageIndex: z.string().optional(),
 })
 
-export async function getOrdersDelivered(
+export async function getAllOrders(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
   try {
     const { pageIndex } = schemaRequestQuery.parse(request.query)
 
-    const ordersDelivered = await prisma.orders.findMany({
-      where: {
-        status: 'DELIVERED',
-      },
-
+    const ordersAll = await prisma.orders.findMany({
       orderBy: {
-        createdAt: 'desc',
+        createdAt: 'asc',
       },
 
-      take: 10,
-      skip: Number(pageIndex) * 10,
+      take: 8,
+      skip: Number(pageIndex) * 8,
 
       include: {
         table: {
@@ -46,18 +42,14 @@ export async function getOrdersDelivered(
       },
     })
 
-    const totalCount = await prisma.orders.count({
-      where: {
-        status: 'DELIVERED',
-      },
-    })
-    const totalPages = Math.ceil(totalCount / 10)
+    const totalCount = await prisma.orders.count()
+    const totalPages = Math.ceil(totalCount / 8)
 
     return reply.status(200).send({
-      ordersDelivered,
+      ordersAll,
       metas: {
         pageIndex,
-        perPage: 10,
+        perPage: 8,
         totalCount,
         totalPages,
       },

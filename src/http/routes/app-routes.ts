@@ -25,6 +25,7 @@ import { getCategories } from './controllers/get-categories.ts'
 import { getQrcodeUrl } from './controllers/get-qrcode-url.ts'
 import { getTableByNumberTable } from './controllers/get-table-by-number-table.ts'
 import { getOrderProductsDetails } from './controllers/get-order-products-details.ts'
+import { getAllOrders } from './controllers/get-all-orders.ts'
 
 export async function appRoutes(app: FastifyInstance) {
   // authenticate
@@ -57,6 +58,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.get('/tables/qrcode/:tableId', getQrcodeUrl)
 
   // orders
+  app.get('/orders', getAllOrders)
   app.post('/order/:tableId', createOrders)
   app.get('/orders/pending', getordersPending)
   app.get('/orders/ready', getOrdersReady)

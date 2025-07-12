@@ -19,7 +19,7 @@ export async function getordersPending(
       },
 
       orderBy: {
-        createdAt: 'desc',
+        createdAt: 'asc',
       },
 
       take: 10,

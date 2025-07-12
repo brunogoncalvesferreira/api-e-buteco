@@ -101,6 +101,7 @@ model Table {
 
 model Orders {
   id           String        @id @default(uuid())
+  numberOrder  Int           @default(autoincrement())
   status       OrdersStatus  @default(PENDING)
   amount       Float
   payment      Payment?
