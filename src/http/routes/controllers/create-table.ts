@@ -21,7 +21,7 @@ export async function createTable(
   try {
     const { numberTable, capacity } = schemaBodyReqeust.parse(request.body)
 
-    const qrcodeUrl = `http://localhost:5173/mesa/?search=${numberTable}`
+    const qrcodeUrl = `http://localhost:5173/mesa/${numberTable}`
 
     const qrcodeFileName = `qrcode-${numberTable}.png`
 
@@ -30,6 +30,8 @@ export async function createTable(
       '../../../../uploads/qrcodes',
       qrcodeFileName
     )
+
+    const qrcodePathSave = `qrcodes/${qrcodeFileName}`
 
     await QRCode.toFile(qrcodePath, qrcodeUrl, {
       errorCorrectionLevel: 'H',
@@ -41,7 +43,7 @@ export async function createTable(
       data: {
         numberTable,
         capacity,
-        qrcodePath: qrcodeFileName,
+        qrcodePath: qrcodePathSave,
       },
     })
 

@@ -22,6 +22,9 @@ import { updateProduct } from './controllers/update-product.ts'
 import { updateProfile } from './controllers/update-profile.ts'
 import { logout } from './controllers/logout.ts'
 import { getCategories } from './controllers/get-categories.ts'
+import { getQrcodeUrl } from './controllers/get-qrcode-url.ts'
+import { getTableByNumberTable } from './controllers/get-table-by-number-table.ts'
+import { getOrderProductsDetails } from './controllers/get-order-products-details.ts'
 
 export async function appRoutes(app: FastifyInstance) {
   // authenticate
@@ -50,6 +53,8 @@ export async function appRoutes(app: FastifyInstance) {
   // tables
   app.post('/tables', createTable)
   app.get('/tables', getTables)
+  app.get('/table/:numberTable', getTableByNumberTable)
+  app.get('/tables/qrcode/:tableId', getQrcodeUrl)
 
   // orders
   app.post('/order/:tableId', createOrders)
@@ -60,4 +65,5 @@ export async function appRoutes(app: FastifyInstance) {
   app.patch('/order/ready/:orderId', orderStatusReady)
   app.patch('/order/delivered/:orderId', orderStatusDelivered)
   app.patch('/order/cancelled/:orderId', orderStatusCancelled)
+  app.get('/order/product-details/:orderId', getOrderProductsDetails)
 }

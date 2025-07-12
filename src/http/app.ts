@@ -9,7 +9,12 @@ import { fastifyStatic } from '@fastify/static'
 
 import { appRoutes } from './routes/app-routes.ts'
 import { env } from '../env/index.ts'
-import { join } from 'node:path'
+
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 export const app = fastify()
 
@@ -19,9 +24,13 @@ app.register(fastifyCors, {
   credentials: true,
 })
 
-const uploadsPath = join(process.cwd(), 'uploads')
+const uploadsPath = join(__dirname, '..', '..', 'uploads')
 
-app.register(fastifyMultipart)
+console.log(uploadsPath)
+
+app.register(fastifyMultipart, {
+  prefix: 'files',
+})
 
 app.register(fastifyStatic, {
   root: uploadsPath,
