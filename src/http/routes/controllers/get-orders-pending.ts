@@ -31,6 +31,17 @@ export async function getordersPending(
             numberTable: true,
           },
         },
+        ordersItems: {
+          select: {
+            product: {
+              select: {
+                name: true,
+                price: true,
+              },
+            },
+            quantity: true,
+          },
+        },
       },
     })
 
