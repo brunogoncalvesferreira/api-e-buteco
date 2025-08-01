@@ -18,8 +18,8 @@ export async function getAllOrders(
         createdAt: 'asc',
       },
 
-      take: 8,
-      skip: Number(pageIndex) * 8,
+      take: 10,
+      skip: Number(pageIndex) * 10,
 
       include: {
         table: {
@@ -43,7 +43,7 @@ export async function getAllOrders(
     })
 
     const totalCount = await prisma.orders.count()
-    const totalPages = Math.ceil(totalCount / 8)
+    const totalPages = Math.ceil(totalCount / 10)
 
     return reply.status(200).send({
       ordersAll,

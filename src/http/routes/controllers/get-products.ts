@@ -20,6 +20,8 @@ export async function getProducts(
           contains: name,
           mode: 'insensitive',
         },
+
+        deleted: 'FALSE',
       },
 
       orderBy: {

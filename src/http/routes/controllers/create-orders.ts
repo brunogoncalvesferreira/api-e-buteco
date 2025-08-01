@@ -78,6 +78,14 @@ export async function createOrders(
       },
     })
 
+    await prisma.table.update({
+      where: { id: tableId },
+      data: {
+        tableStatus: 'BUSY',
+        upadetedAt: new Date(),
+      },
+    })
+
     return reply.status(201).send(order)
   } catch (error) {
     if (error instanceof z.ZodError) {
