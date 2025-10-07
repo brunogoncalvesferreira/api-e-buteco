@@ -19,7 +19,7 @@ export async function getOrdersReady(
       },
 
       orderBy: {
-        createdAt: 'desc',
+        createdAt: 'asc',
       },
 
       take: 10,
@@ -29,6 +29,17 @@ export async function getOrdersReady(
         table: {
           select: {
             numberTable: true,
+          },
+        },
+        ordersItems: {
+          select: {
+            product: {
+              select: {
+                name: true,
+                price: true,
+              },
+            },
+            quantity: true,
           },
         },
       },

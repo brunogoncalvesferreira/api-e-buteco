@@ -19,11 +19,11 @@ export async function getordersPending(
       },
 
       orderBy: {
-        createdAt: 'desc',
+        createdAt: 'asc',
       },
 
-      take: 10,
-      skip: Number(pageIndex) * 10,
+      take: 12,
+      skip: Number(pageIndex) * 12,
 
       include: {
         table: {
@@ -50,13 +50,13 @@ export async function getordersPending(
         status: 'PENDING',
       },
     })
-    const totalPages = Math.ceil(totalCount / 10)
+    const totalPages = Math.ceil(totalCount / 12)
 
     return reply.status(200).send({
       ordersPending,
       metas: {
         pageIndex,
-        perPage: 10,
+        perPage: 12,
         totalCount,
         totalPages,
       },

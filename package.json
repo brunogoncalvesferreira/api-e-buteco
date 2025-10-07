@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/http/server.ts"
+    "dev": "tsx watch --env-file .env src/http/server.ts"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +25,7 @@
     "@fastify/static": "^8.2.0",
     "@prisma/client": "^6.11.1",
     "@types/node": "^24.0.10",
+    "axios": "^1.11.0",
     "bcryptjs": "^3.0.2",
     "date-fns": "^4.1.0",
     "dotenv": "^17.0.1",

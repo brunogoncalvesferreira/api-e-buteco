@@ -43,7 +43,7 @@ export async function createProducts(
             description: String((file.description as MultipartValue).value),
             price: Number((file.price as MultipartValue).value),
             categoriesId: String((file.categoriesId as MultipartValue).value),
-            imageUrl,
+            imageUrl: imageUrl ? imageUrl : null,
           },
         })
 

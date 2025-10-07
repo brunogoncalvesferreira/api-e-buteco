@@ -60,6 +60,7 @@ export async function createOrders(
         observations,
         payment,
         tableId,
+        status: 'PENDING',
         ordersItems: {
           create: orderProducts,
         },
@@ -75,6 +76,14 @@ export async function createOrders(
             },
           },
         },
+      },
+    })
+
+    await prisma.table.update({
+      where: { id: tableId },
+      data: {
+        tableStatus: 'BUSY',
+        upadetedAt: new Date(),
       },
     })
 
