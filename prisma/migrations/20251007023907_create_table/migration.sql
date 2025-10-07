@@ -87,7 +87,6 @@ CREATE TABLE "Orders" (
     "paymentId" TEXT,
     "qrCodeText" TEXT,
     "qrImageUrl" TEXT,
-    "userId" TEXT NOT NULL,
     "tableId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

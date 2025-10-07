@@ -29,6 +29,7 @@ export async function createOrders(
 
     const { tableId } = schemaBodyReqeustParams.parse(request.params)
 
+
     const productIds = products.map((product) => product.productId)
 
     const productExist = await prisma.product.findMany({
@@ -61,6 +62,7 @@ export async function createOrders(
         payment,
         tableId,
         status: 'PENDING',
+        wasPaid: 'FALSE',
         ordersItems: {
           create: orderProducts,
         },
@@ -74,6 +76,11 @@ export async function createOrders(
                 name: true,
               },
             },
+          },
+        },
+        table: {
+          select: {
+            numberTable: true,
           },
         },
       },
