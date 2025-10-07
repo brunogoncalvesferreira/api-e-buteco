@@ -30,7 +30,8 @@ import { deactivateProduct } from './controllers/deactivate-product.ts'
 import { activeProduct } from './controllers/active-product.ts'
 import { deleteProduct } from './controllers/delete-product.ts'
 import { recentOrderTable } from './controllers/recent-order-table.ts'
-import { createOrderPix } from './controllers/payment.ts'
+import { createOrderPix, createOrderCard } from './controllers/payment.ts'
+import { handlePagSeguroWebhook, checkPaymentStatus } from './controllers/webhook-pagseguro.ts'
 
 export async function appRoutes(app: FastifyInstance) {
   // authenticate
@@ -80,4 +81,9 @@ export async function appRoutes(app: FastifyInstance) {
 
   // payment
   app.post('/pay/pix', createOrderPix)
+  app.post('/pay/card', createOrderCard)
+  
+  // webhooks
+  app.post('/webhook/pagseguro', handlePagSeguroWebhook)
+  app.get('/payment/status/:orderId', checkPaymentStatus)
 }
