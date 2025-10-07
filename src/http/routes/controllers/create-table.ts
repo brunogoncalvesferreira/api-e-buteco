@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 import QRCode from 'qrcode'
 import path from 'node:path'
 
-const schemaBodyReqeust = z.object({
+const schemaBodyRequest = z.object({
   numberTable: z.string(),
   capacity: z.string(),
 })
@@ -19,7 +19,7 @@ export async function createTable(
   reply: FastifyReply
 ) {
   try {
-    const { numberTable, capacity } = schemaBodyReqeust.parse(request.body)
+    const { numberTable, capacity } = schemaBodyRequest.parse(request.body)
 
     const qrcodeUrl = `http://localhost:5173/mesa/${numberTable}`
 

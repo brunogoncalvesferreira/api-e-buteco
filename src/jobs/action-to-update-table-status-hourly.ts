@@ -1,4 +1,4 @@
-import { prisma } from '../lib/prisma.ts'
+/* import { prisma } from '../lib/prisma.ts'
 
 async function actionToUpdateTableStatusHourly() {
   const busyTables = await prisma.table.findMany({
@@ -32,3 +32,4 @@ async function actionToUpdateTableStatusHourly() {
 }
 
 export { actionToUpdateTableStatusHourly }
+ */

@@ -84,6 +84,10 @@ CREATE TABLE "Orders" (
     "payment" "Payment",
     "wasPaid" "OrdersWasPaid" NOT NULL DEFAULT 'FALSE',
     "observations" TEXT,
+    "paymentId" TEXT,
+    "qrCodeText" TEXT,
+    "qrImageUrl" TEXT,
+    "userId" TEXT NOT NULL,
     "tableId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -102,8 +106,27 @@ CREATE TABLE "OrdersItems" (
     CONSTRAINT "OrdersItems_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "payments" (
+    "id" TEXT NOT NULL,
+    "provider" TEXT NOT NULL,
+    "providerId" TEXT,
+    "reference" TEXT,
+    "amount" DOUBLE PRECISION NOT NULL,
+    "currency" TEXT NOT NULL DEFAULT 'BRL',
+    "method" TEXT NOT NULL,
+    "status" TEXT NOT NULL,
+    "metadata" JSONB,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "payments_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Table_numberTable_key" ON "Table"("numberTable");
 
 -- AddForeignKey
 ALTER TABLE "Product" ADD CONSTRAINT "Product_categoriesId_fkey" FOREIGN KEY ("categoriesId") REFERENCES "Categories"("id") ON DELETE SET NULL ON UPDATE CASCADE;

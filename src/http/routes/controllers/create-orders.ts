@@ -60,6 +60,7 @@ export async function createOrders(
         observations,
         payment,
         tableId,
+        status: 'PENDING',
         ordersItems: {
           create: orderProducts,
         },

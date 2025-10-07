@@ -12,7 +12,7 @@ import { env } from '../env/index.ts'
 
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { actionToUpdateTableStatusHourly } from '../jobs/action-to-update-table-status-hourly.ts'
+/* import { actionToUpdateTableStatusHourly } from '../jobs/action-to-update-table-status-hourly.ts' */
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -53,4 +53,4 @@ app.register(fastifyJwt, {
   },
 })
 
-actionToUpdateTableStatusHourly()
+/* actionToUpdateTableStatusHourly() */

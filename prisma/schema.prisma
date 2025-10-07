@@ -73,13 +73,13 @@ model Categories {
 }
 
 model Product {
-  id          String        @id @default(uuid())
+  id          String         @id @default(uuid())
   name        String
   description String?
   price       Float
   imageUrl    String?
-  active      ProductActive @default(TRUE)
-  deleted  DeleteProduct? @default(FALSE)
+  active      ProductActive  @default(TRUE)
+  deleted     DeleteProduct? @default(FALSE)
 
   createdAt  DateTime @default(now())
   upadetedAt DateTime @default(now())
@@ -92,7 +92,7 @@ model Product {
 
 model Table {
   id          String  @id @default(uuid())
-  numberTable String @unique
+  numberTable String  @unique
   capacity    String
   qrcodePath  String?
 
@@ -114,6 +114,10 @@ model Orders {
   wasPaid      OrdersWasPaid @default(FALSE) // foi pago ?
   observations String?
 
+  paymentId  String? // ID do PagBank
+  qrCodeText String? // Para PIX
+  qrImageUrl String? // Para PIX
+
   table   Table?  @relation(fields: [tableId], references: [id])
   tableId String?
 
@@ -133,4 +137,19 @@ model OrdersItems {
 
   product   Product? @relation(fields: [productId], references: [id])
   productId String?
+}
+
+model Payments {
+  id         String   @id @default(uuid())
+  provider   String
+  providerId String?
+  reference  String?
+  amount     Float
+  currency   String   @default("BRL")
+  method     String
+  status     String
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  @@map("payments")
 }
