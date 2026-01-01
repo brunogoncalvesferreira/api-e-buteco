@@ -2,7 +2,7 @@ name: api-e-buteco
 
 services:
   pg:
-    image: bitnami/postgresql:17.5.0
+    image: postgres:17
     restart: always
     ports:
       - '5532:5532'
@@ -11,7 +11,7 @@ services:
       - POSTGRES_PASSWORD=docker
       - POSTGRES_DB=db-buteco
     volumes:
-      - pgdata:/var/lib/bitnami/postgresql
+        - pgdata:/var/lib/postgresql/data
 
 volumes:
   pgdata:
