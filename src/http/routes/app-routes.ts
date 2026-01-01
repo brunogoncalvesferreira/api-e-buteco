@@ -82,8 +82,14 @@ export async function appRoutes(app: FastifyInstance) {
   // payment
   app.post('/pay/pix', createOrderPix)
   app.post('/pay/card', createOrderCard)
-  
+
   // webhooks
   app.post('/webhook/pagseguro', handlePagSeguroWebhook)
   app.get('/payment/status/:orderId', checkPaymentStatus)
+
+
+  // test route
+  app.get('/test', async () => {
+    return { message: 'Server is running!' }
+  })
 }
