@@ -12,7 +12,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.11.0",
   "devDependencies": {
     "@types/qrcode": "^1.5.5",
     "prisma": "^6.11.1",
