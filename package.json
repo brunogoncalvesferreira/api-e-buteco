@@ -5,6 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "build": "tsup src/http/server.ts --format esm,cjs --dts",
+    "start": "node ./dist/server.js",
     "dev": "tsx watch --env-file .env src/http/server.ts"
   },
   "keywords": [],
@@ -14,6 +16,7 @@
   "devDependencies": {
     "@types/qrcode": "^1.5.5",
     "prisma": "^6.11.1",
+    "tsup": "^8.5.1",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   },
