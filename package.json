@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsup src/http/server.ts --format esm,cjs --dts",
     "start": "node ./dist/server.js",
-    "dev": "tsx watch --env-file .env src/http/server.ts"
+    "dev": "tsx watch src/http/server.ts"
   },
   "keywords": [],
   "author": "",
