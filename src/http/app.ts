@@ -20,7 +20,7 @@ const __dirname = dirname(__filename)
 export const app = fastify()
 
 app.register(fastifyCors, {
-  origin: ['http://localhost:5173'],
+  origin: ['http://localhost:5173', 'https://ebuteco.vercel.app', 'https://ebuteco.com'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true,
 })
