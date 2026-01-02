@@ -12,7 +12,6 @@ const schemaBodyRequest = z.object({
 })
 
 const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 
 export async function createTable(
   request: FastifyRequest,
@@ -26,8 +25,8 @@ export async function createTable(
     const qrcodeFileName = `qrcode-${numberTable}.png`
 
     const qrcodePath = path.resolve(
-      __dirname,
-      '../../../../uploads/qrcodes',
+      process.cwd(),
+      'uploads', 'qrcodes',
       qrcodeFileName
     )
 

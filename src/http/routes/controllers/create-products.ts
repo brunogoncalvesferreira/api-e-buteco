@@ -10,7 +10,6 @@ import util from 'node:util'
 import path from 'node:path'
 
 const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 
 export async function createProducts(
   request: FastifyRequest,
@@ -28,8 +27,8 @@ export async function createProducts(
         const filename = `${Date.now()}-${part.filename}`
 
         const uploadPath = path.resolve(
-          __dirname,
-          '../../../../uploads/products',
+          process.cwd(),
+          'uploads', 'products',
           filename
         )
 
