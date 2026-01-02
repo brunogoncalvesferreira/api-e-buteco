@@ -14,9 +14,6 @@ import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 /* import { actionToUpdateTableStatusHourly } from '../jobs/action-to-update-table-status-hourly.ts' */
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
 export const app = fastify()
 
 app.register(fastifyCors, {
@@ -25,7 +22,7 @@ app.register(fastifyCors, {
   credentials: true,
 })
 
-const uploadsPath = join(__dirname, '..', '..', 'uploads')
+const uploadsPath = join(process.cwd(), 'uploads')
 
 app.register(fastifyMultipart, {
   prefix: 'files',
