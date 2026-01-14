@@ -2,7 +2,6 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { prisma } from '../../../lib/prisma.ts'
 
-import { fileURLToPath } from 'node:url'
 import QRCode from 'qrcode'
 import path from 'node:path'
 
@@ -10,8 +9,6 @@ const schemaBodyRequest = z.object({
   numberTable: z.string(),
   capacity: z.string(),
 })
-
-const __filename = fileURLToPath(import.meta.url)
 
 export async function createTable(
   request: FastifyRequest,

@@ -3,13 +3,10 @@ import { z } from 'zod'
 import { prisma } from '../../../lib/prisma.ts'
 import { Multipart, MultipartFields, MultipartValue } from '@fastify/multipart'
 
-import { fileURLToPath } from 'node:url'
 import { pipeline } from 'node:stream'
 import fs from 'node:fs'
 import util from 'node:util'
 import path from 'node:path'
-
-const __filename = fileURLToPath(import.meta.url)
 
 export async function createProducts(
   request: FastifyRequest,
