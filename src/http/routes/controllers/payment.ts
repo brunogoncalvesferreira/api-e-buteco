@@ -50,6 +50,16 @@ export async function createOrderPix(
       unit_amount,
     })
 
+    // Atualizar o pedido com o ID do pagamento PIX
+    if (reference_id) {
+      await prisma.orders.update({
+        where: { id: reference_id },
+        data: {
+          paymentId: pixResponse.id,
+        },
+      })
+    }
+
     return reply.status(201).send({
       message: 'Pedido PIX criado com sucesso',
       data: pixResponse,

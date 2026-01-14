@@ -10,8 +10,7 @@ import { fastifyStatic } from '@fastify/static'
 import { appRoutes } from './routes/app-routes.ts'
 import { env } from '../env/index.ts'
 
-import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
 /* import { actionToUpdateTableStatusHourly } from '../jobs/action-to-update-table-status-hourly.ts' */
 
 export const app = fastify()
