@@ -13,8 +13,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^24.10.8",
+    "@types/pg": "^8.16.0",
     "@types/qrcode": "^1.5.5",
-    "prisma": "^6.11.1",
+    "prisma": "^7.2.0",
     "tsup": "^8.5.1",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
@@ -26,7 +28,6 @@
     "@fastify/multipart": "^9.0.3",
     "@fastify/static": "^8.2.0",
     "@prisma/client": "^6.11.1",
-    "@types/node": "^24.0.10",
     "axios": "^1.11.0",
     "bcryptjs": "^3.0.2",
     "date-fns": "^4.1.0",
