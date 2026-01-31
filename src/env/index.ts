@@ -1,9 +1,9 @@
-import 'dotenv/config'
+import "dotenv/config";
 
-import z from 'zod'
+import z from "zod";
 
 const envSchema = z.object({
-  NODE_ENV: z.enum(['dev', 'test', 'production']).default('dev'),
+  NODE_ENV: z.enum(["dev", "test", "production"]).default("dev"),
   JWT_SECRET: z.string(),
   APP_URL: z.string().url(),
   PAGBANK_API_URL: z.string().url(),
@@ -13,7 +13,7 @@ const envSchema = z.object({
   PAGBANK_NOTIFICATION_URL: z.string().url(),
   PAGBANK_REDIRECT_URL: z.string().url(),
   PAGBANK_NOTIFICATION_ID: z.string().optional(),
-})
+});
 
 const env = envSchema.parse({
   NODE_ENV: process.env.NODE_ENV,
@@ -26,6 +26,6 @@ const env = envSchema.parse({
   PAGBANK_NOTIFICATION_URL: process.env.PAGBANK_NOTIFICATION_URL,
   PAGBANK_REDIRECT_URL: process.env.PAGBANK_REDIRECT_URL,
   PAGBANK_NOTIFICATION_ID: process.env.PAGBANK_NOTIFICATION_ID,
-})
+});
 
-export { env }
+export { env };

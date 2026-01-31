@@ -30,6 +30,7 @@ enum TableStatus {
 enum OrdersStatus {
   DELIVERED // entregue
   PENDING // pendente
+  PREPARATION // preparação
   READY // pronto
   CANCELLED // cancelado
 }
