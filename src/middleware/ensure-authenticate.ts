@@ -1,9 +1,12 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
+import { FastifyReply, FastifyRequest } from "fastify";
 
-export async function ensureAuthenticate(request: FastifyRequest, reply: FastifyReply) {
+export async function ensureAuthenticate(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
   try {
-    await request.jwtVerify()
+    await request.jwtVerify();
   } catch (error) {
-    return reply.status(401).send({ message: 'TOKEN INVALID' })
+    return reply.status(401).send({ message: "TOKEN INVALID" });
   }
 }

@@ -1,13 +1,18 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import { z } from 'zod'
-import { createPixOrder, createCardOrder, CreateCardOrderRequest } from '../../../services/pag-seguro.ts'
-import { prisma } from '../../../lib/prisma.ts'
+import { FastifyReply, FastifyRequest } from "fastify";
+import { z } from "zod";
+import {
+  createPixOrder,
+  createCardOrder,
+  CreateCardOrderRequest,
+} from "../../../services/pag-seguro.ts";
+import { prisma } from "../../../lib/prisma.ts";
+import { getIO } from "../../../lib/socket.ts";
 
 interface CreatePixOrderRequest {
-  reference_id?: string
-  name: string
-  quantity: number
-  unit_amount: number
+  reference_id?: string;
+  name: string;
+  quantity: number;
+  unit_amount: number;
 }
 
 const createCardOrderSchema = z.object({
@@ -16,12 +21,14 @@ const createCardOrderSchema = z.object({
     name: z.string(),
     email: z.string().email(),
     tax_id: z.string(),
-    phones: z.array(z.object({
-      country: z.string(),
-      area: z.string(),
-      number: z.string(),
-      type: z.enum(['MOBILE', 'MAIN']),
-    })),
+    phones: z.array(
+      z.object({
+        country: z.string(),
+        area: z.string(),
+        number: z.string(),
+        type: z.enum(["MOBILE", "MAIN"]),
+      }),
+    ),
   }),
   card: z.object({
     number: z.string(),
@@ -33,22 +40,22 @@ const createCardOrderSchema = z.object({
     }),
   }),
   installments: z.number().min(1).max(12),
-})
+});
 
 export async function createOrderPix(
   request: FastifyRequest,
-  reply: FastifyReply
+  reply: FastifyReply,
 ) {
   try {
     const { reference_id, name, quantity, unit_amount } =
-      request.body as CreatePixOrderRequest
+      request.body as CreatePixOrderRequest;
 
     const pixResponse = await createPixOrder({
       reference_id,
       name,
       quantity,
       unit_amount,
-    })
+    });
 
     // Atualizar o pedido com o ID do pagamento PIX
     if (reference_id) {
@@ -57,29 +64,28 @@ export async function createOrderPix(
         data: {
           paymentId: pixResponse.id,
         },
-      })
+      });
     }
 
     return reply.status(201).send({
-      message: 'Pedido PIX criado com sucesso',
+      message: "Pedido PIX criado com sucesso",
       data: pixResponse,
-    })
+    });
   } catch (error) {
-    console.error('Erro ao criar pedido PIX:', error)
+    console.error("Erro ao criar pedido PIX:", error);
     return reply.status(500).send({
-      message: 'Erro interno do servidor',
-    })
+      message: "Erro interno do servidor",
+    });
   }
 }
 
 export async function createOrderCard(
   request: FastifyRequest,
-  reply: FastifyReply
+  reply: FastifyReply,
 ) {
   try {
-    const { orderId, customer, card, installments } = createCardOrderSchema.parse(
-      request.body
-    )
+    const { orderId, customer, card, installments } =
+      createCardOrderSchema.parse(request.body);
 
     // Buscar o pedido no banco de dados
     const order = await prisma.orders.findUnique({
@@ -91,18 +97,18 @@ export async function createOrderCard(
           },
         },
       },
-    })
+    });
 
     if (!order) {
       return reply.status(404).send({
-        message: 'Pedido não encontrado',
-      })
+        message: "Pedido não encontrado",
+      });
     }
 
-    if (order.wasPaid === 'TRUE') {
+    if (order.wasPaid === "TRUE") {
       return reply.status(400).send({
-        message: 'Pedido já foi pago',
-      })
+        message: "Pedido já foi pago",
+      });
     }
 
     // Criar o pedido no PagSeguro
@@ -114,31 +120,51 @@ export async function createOrderCard(
       customer,
       card,
       installments,
-    })
+    });
 
-    // Atualizar o pedido com o ID do pagamento
+    // Verificar se o pagamento foi aprovado
+    const isPaid =
+      cardResponse.status === "PAID" ||
+      cardResponse.charges?.some((charge: any) => charge.status === "PAID");
+
+    const updateData: any = {
+      paymentId: cardResponse.id,
+    };
+
+    if (isPaid) {
+      updateData.wasPaid = "TRUE";
+      if (order.status === "PENDING") {
+        updateData.status = "PREPARATION";
+      }
+    }
+
+    // Atualizar o pedido com o ID do pagamento e status
     await prisma.orders.update({
       where: { id: orderId },
-      data: {
-        paymentId: cardResponse.id,
-      },
-    })
+      data: updateData,
+    });
+
+    // Emit Socket.io event if status changed
+    if (isPaid && order.status === "PENDING") {
+      const io = getIO();
+      io.emit("orders:status-change", { orderId, status: "PREPARATION" });
+    }
 
     return reply.status(201).send({
-      message: 'Pagamento via cartão processado com sucesso',
+      message: "Pagamento via cartão processado com sucesso",
       data: cardResponse,
-    })
+    });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return reply.status(400).send({
-        message: 'Dados inválidos',
+        message: "Dados inválidos",
         errors: error.issues,
-      })
+      });
     }
 
-    console.error('Erro ao processar pagamento via cartão:', error)
+    console.error("Erro ao processar pagamento via cartão:", error);
     return reply.status(500).send({
-      message: 'Erro interno do servidor',
-    })
+      message: "Erro interno do servidor",
+    });
   }
 }

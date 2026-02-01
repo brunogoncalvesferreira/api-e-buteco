@@ -1,25 +1,25 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import { z } from 'zod'
-import { prisma } from '../../../lib/prisma.ts'
+import { FastifyReply, FastifyRequest } from "fastify";
+import { z } from "zod";
+import { prisma } from "../../../lib/prisma.ts";
 
 const schemaRequestQuery = z.object({
   pageIndex: z.string().optional(),
-})
+});
 
 export async function getOrdersDelivered(
   request: FastifyRequest,
-  reply: FastifyReply
+  reply: FastifyReply,
 ) {
   try {
-    const { pageIndex } = schemaRequestQuery.parse(request.query)
+    const { pageIndex } = schemaRequestQuery.parse(request.query);
 
     const ordersDelivered = await prisma.orders.findMany({
       where: {
-        status: 'DELIVERED',
+        status: "DELIVERED",
       },
 
       orderBy: {
-        createdAt: 'desc',
+        createdAt: "desc",
       },
 
       take: 10,
@@ -44,14 +44,14 @@ export async function getOrdersDelivered(
           },
         },
       },
-    })
+    });
 
     const totalCount = await prisma.orders.count({
       where: {
-        status: 'DELIVERED',
+        status: "DELIVERED",
       },
-    })
-    const totalPages = Math.ceil(totalCount / 10)
+    });
+    const totalPages = Math.ceil(totalCount / 10);
 
     return reply.status(200).send({
       ordersDelivered,
@@ -61,12 +61,12 @@ export async function getOrdersDelivered(
         totalCount,
         totalPages,
       },
-    })
+    });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return reply.status(400).send({
         message: error.issues,
-      })
+      });
     }
   }
 }

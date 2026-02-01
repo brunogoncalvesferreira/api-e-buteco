@@ -1,37 +1,38 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import { z } from 'zod'
-import { prisma } from '../../../lib/prisma.ts'
-import { Multipart, MultipartFields, MultipartValue } from '@fastify/multipart'
+import { FastifyReply, FastifyRequest } from "fastify";
+import { z } from "zod";
+import { prisma } from "../../../lib/prisma.ts";
+import { Multipart, MultipartFields, MultipartValue } from "@fastify/multipart";
 
-import { pipeline } from 'node:stream'
-import fs from 'node:fs'
-import util from 'node:util'
-import path from 'node:path'
+import { pipeline } from "node:stream";
+import fs from "node:fs";
+import util from "node:util";
+import path from "node:path";
 
 export async function createProducts(
   request: FastifyRequest,
-  reply: FastifyReply
+  reply: FastifyReply,
 ) {
   try {
-    const parts = request.files()
-    const pump = util.promisify(pipeline)
+    const parts = request.files();
+    const pump = util.promisify(pipeline);
 
     for await (const part of parts) {
       if (part.file) {
-        const multipart = part as Multipart
-        const file = multipart.fields as MultipartFields
+        const multipart = part as Multipart;
+        const file = multipart.fields as MultipartFields;
 
-        const filename = `${Date.now()}-${part.filename}`
+        const filename = `${Date.now()}-${part.filename}`;
 
         const uploadPath = path.resolve(
           process.cwd(),
-          'uploads', 'products',
-          filename
-        )
+          "uploads",
+          "products",
+          filename,
+        );
 
-        const imageUrl = `products/${filename}`
+        const imageUrl = `products/${filename}`;
 
-        await pump(part.file, fs.createWriteStream(uploadPath))
+        await pump(part.file, fs.createWriteStream(uploadPath));
 
         const product = await prisma.product.create({
           data: {
@@ -41,18 +42,18 @@ export async function createProducts(
             categoriesId: String((file.categoriesId as MultipartValue).value),
             imageUrl: imageUrl ? imageUrl : null,
           },
-        })
+        });
 
-        reply.status(201).send({ product })
+        reply.status(201).send({ product });
       } else {
-        reply.status(400).send({ message: 'File not found' })
+        reply.status(400).send({ message: "File not found" });
       }
     }
   } catch (error) {
     if (error instanceof z.ZodError) {
       return reply.status(400).send({
         message: error.issues,
-      })
+      });
     }
   }
 }

@@ -1,17 +1,17 @@
-import type { FastifyReply, FastifyRequest } from 'fastify'
-import { prisma } from '../../../lib/prisma.ts'
-import z from 'zod'
+import type { FastifyReply, FastifyRequest } from "fastify";
+import { prisma } from "../../../lib/prisma.ts";
+import z from "zod";
 
 const schemaBodyRequestParams = z.object({
   productId: z.string(),
-})
+});
 
 export async function activeProduct(
   request: FastifyRequest,
-  reply: FastifyReply
+  reply: FastifyReply,
 ) {
   try {
-    const { productId } = schemaBodyRequestParams.parse(request.params)
+    const { productId } = schemaBodyRequestParams.parse(request.params);
 
     await prisma.product.update({
       where: {
@@ -19,16 +19,16 @@ export async function activeProduct(
       },
 
       data: {
-        active: 'TRUE',
+        active: "TRUE",
       },
-    })
+    });
 
-    return reply.status(200).send()
+    return reply.status(200).send();
   } catch (error) {
     if (error instanceof z.ZodError) {
       return reply.status(400).send({
         message: error.issues,
-      })
+      });
     }
   }
 }
