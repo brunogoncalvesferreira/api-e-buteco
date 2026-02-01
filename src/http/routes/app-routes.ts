@@ -36,6 +36,7 @@ import {
   checkPaymentStatus,
 } from "./controllers/webhook-pagseguro.ts";
 import { getOrdersPreparation } from "./controllers/get-orders-preparation.ts";
+import { orderStatusPreparation } from "./controllers/order-status-preparation.ts";
 
 export async function appRoutes(app: FastifyInstance) {
   // authenticate
@@ -83,6 +84,7 @@ export async function appRoutes(app: FastifyInstance) {
   app.get("/order/product-details/:orderId", getOrderProductsDetails);
   app.get("/order/table/:numberTable", recentOrderTable);
   app.get("/orders/preparation", getOrdersPreparation);
+  app.patch("/order/preparation/:orderId", orderStatusPreparation);
 
   // payment
   app.post("/pay/pix", createOrderPix);
