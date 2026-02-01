@@ -1,5 +1,5 @@
-import { io } from "../http/server.ts";
+import { getIO as getIOFromServer } from "../http/server.ts";
 
 export function getIO() {
-  return io;
+  return getIOFromServer();
 }
